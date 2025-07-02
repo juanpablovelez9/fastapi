@@ -123,3 +123,4 @@ pip install -r requirements.txt
 # 6. Ejecutar la aplicación
 uvicorn app.main:app --reload
 # fastapi
+# fastapi
