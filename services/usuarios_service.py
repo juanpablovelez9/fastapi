@@ -64,6 +64,18 @@ def obtener_usuario_por_id(usuario_id: int) -> UserResponse | None:
         return UserResponse(id=row[0], nombre=row[1], email=row[2])
     return None
 
+
+def eliminar_usuario_por_id(usuario_id: int) -> str:
+    conn = ConnectionFactory.create_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM usuarios WHERE id = ?", (usuario_id,))
+    conn.commit()    
+    cursor.close()
+    conn.close()
+    
+    return "Usuario eliminado correctamente"
+
+
 def obtener_usuario_por_Email(usuario_email: str) -> UserResponse | None:
     conn = ConnectionFactory.create_connection()
     cursor = conn.cursor()
@@ -80,4 +92,30 @@ def obtener_usuario_por_Email(usuario_email: str) -> UserResponse | None:
  
     if row:
         return UserResponse(id=row[0], nombre=row[1], email=row[2])
+    return None
+
+def autenticar_usuario(email: str, password: str):
+    conn = ConnectionFactory.create_connection()
+    cursor = conn.cursor()
+
+    query = """
+    SELECT id, nombre, email, rol
+    FROM usuarios
+    WHERE email = ? AND contrasena = ?
+    """
+
+    cursor.execute(query, (email, password))
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        print("Encuentro usuario")
+        print(row.id)
+        return {
+            "id": row.id,
+            "username": row.nombre,
+            "email": row.email,
+            "rol": row.rol
+        }
+    
     return None
