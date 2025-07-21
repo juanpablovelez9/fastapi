@@ -1,19 +1,8 @@
 from fastapi import FastAPI, Depends
 from fastapi.openapi.utils import get_openapi
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from routers import contenidos, users
 from auth import auth
-from web import home_web
-from web.auth_web import router as auth_router
-from web.dashboard_web import router as dash_router
-from web.contenido_web import router as contenido_router
-from web.CrearUsuario_web import router as crarusuario_router
-from web.ListarUsuarios_web import router as ListarUsuarios_router
-from web.EliminarUsuario_web import router as EliminarUsuario_router
-from web.CrearContenido_web import router as CrearContenido_router
-
-
 
 # Crear la aplicación FastAPI
 app = FastAPI(
@@ -21,9 +10,6 @@ app = FastAPI(
     description="API Backend para plataforma tipo Netflix",
     version="1.0.0"
 )
-
-# Configurar archivos estáticos
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Definir esquema de seguridad para Swagger UI
 def custom_openapi():
@@ -53,14 +39,6 @@ app.openapi = custom_openapi
 app.include_router(contenidos.router)
 app.include_router(users.router)
 app.include_router(auth.router)
-app.include_router(home_web.router)
-app.include_router(contenido_router, tags=["contenido"])
-app.include_router(crarusuario_router, tags=["crarusuario"])
-app.include_router(ListarUsuarios_router, tags=["ListarUsuarios"])
-app.include_router(EliminarUsuario_router, tags=["EliminarUsuario"])
-app.include_router(CrearContenido_router, tags=["CrearContenido"])
-app.include_router(auth_router, tags=["web-auth"])
-app.include_router(dash_router, tags=["dash-router"])
 
 # Endpoint principal
 @app.get("/")
@@ -71,5 +49,3 @@ async def root():
         "version": "1.0.0",
         "documentacion": "/docs"
     }
-
-

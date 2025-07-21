@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    {# Sección de Bienvenida - Ahora una tarjeta #}
+    <div class="dashboard-card welcome-card">
+  
+        <h1>¡Bienvenido, {% if nombre %}{{ nombre }}{% else %}Usuario{% endif %}!</h1>
+        <p>Usuario ID: {{ user_id }}</p>
+        <p>Rol: {{ user_role }}</p>
+        {% if email %}
+            <p>Email: {{ email }}</p>
+        {% endif %}
+    </div>
+
+    {# Sección de Acciones - Otra tarjeta #}
+    <div class="dashboard-card actions-card">
+        <h2>Acciones Rápidas</h2>
+        <div class="action-buttons-group">
+            <a href="/contenidos" class="btn btn-primary">Ver Contenidos</a>
+            {% if user_role == "admin" %}
+                <a href="/admin/usuarios" class="btn btn-secondary">Gestionar Usuarios</a>
+            {% endif %}
+            <a href="/home" class="btn btn-secondary">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    {# Sección de listado de usuarios (Solo para administradores) - La tabla dentro de una tarjeta #}
+    {% if user_role == "admin" and all_users %}
+        <div class="dashboard-card admin-users-card">
+            <h2>Lista de Usuarios Registrados</h2>
+            <div class="table-responsive"> {# Contenedor para scroll horizontal en pantallas pequeñas #}
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in all_users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.nombre }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <a href="/admin/usuarios/{{ user.id }}/editar" class="btn btn-sm btn-edit">Editar</a>
+                                <a href="/admin/usuarios/{{ user.id }}/eliminar" class="btn btn-sm btn-delete">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Estilos generales para el contenedor del dashboard */
+    .dashboard-container {
+        display: grid;
+        gap: 25px; /* Espacio entre las tarjetas */
+        padding: 20px;
+        max-width: 1200px; /* Ancho máximo para centrar el contenido */
+        margin: 40px auto; /* Centrar el dashboard en la página */
+    }
+
+    /* Estilo base para todas las tarjetas del dashboard */
+    .dashboard-card {
+        background-color: #1c1c1c; /* Un fondo oscuro pero diferente al cuerpo principal */
+        border-radius: 12px; /* Bordes más suaves */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada pero sutil */
+        padding: 30px;
+        color: var(--text-light);
+        transition: transform 0.2s ease-in-out; /* Animación sutil al pasar el ratón */
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px); /* Pequeño levantamiento al pasar el ratón */
+    }
+
+    /* Estilos específicos para cada tipo de tarjeta */
+    .welcome-card h1 {
+        color: var(--accent-red); /* Color de acento para el título principal */
+        margin-bottom: 15px;
+        font-size: 2.2em;
+    }
+
+    .welcome-card p {
+        margin-bottom: 8px;
+        font-size: 1.1em;
+    }
+
+    .actions-card h2 {
+        color: #eee;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 1.6em;
+    }
+
+    .action-buttons-group {
+        display: flex;
+        flex-wrap: wrap; /* Permite que los botones se ajusten en pantallas pequeñas */
+        gap: 15px; /* Espacio entre los botones */
+        justify-content: center; /* Centra los botones */
+    }
+
+    .btn { /* Revisa que estos estilos base de btn estén en tu base.html o styleGeneral.css */
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-red); /* Rojo principal */
+        color: white;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #e00; /* Rojo un poco más oscuro al pasar el ratón */
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background-color: #3a3a3a; /* Gris oscuro */
+        color: #eee;
+        border: 1px solid #555;
+    }
+
+    .btn-secondary:hover {
+        background-color: #555;
+        transform: translateY(-2px);
+    }
+
+    /* Estilos para la tabla dentro de la tarjeta de usuarios admin */
+    .admin-users-card h2 {
+        color: var(--accent-red);
+        margin-bottom: 25px;
+        text-align: center;
+        font-size: 1.8em;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Permite scroll horizontal en la tabla si es muy ancha */
+    }
+
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        color: var(--text-color);
+    }
+
+    .user-table th,
+    .user-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #282828; /* Borde más sutil */
+    }
+
+    .user-table th {
+        background-color: #2a2a2a; /* Fondo para encabezados */
+        color: var(--accent-red);
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9em;
+    }
+
+    .user-table tbody tr:nth-child(even) {
+        background-color: #1f1f1f; /* Filas pares un poco más oscuras */
+    }
+
+    .user-table tbody tr:hover {
+        background-color: #353535; /* Resaltado al pasar el ratón */
+    }
+
+    .btn-sm {
+        padding: 7px 15px;
+        font-size: 0.85em;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-right: 8px;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-edit {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background-color: #0056b3;
+        transform: translateY(-1px);
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+        transform: translateY(-1px);
+    }
+
+    /* Media Queries para responsividad */
+    @media (min-width: 768px) {
+        .dashboard-container {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Columnas automáticas */
+        }
+        .welcome-card {
+            grid-column: span 2; /* Que ocupe dos columnas en pantallas grandes */
+        }
+        .admin-users-card {
+            grid-column: 1 / -1; /* Ocupa todo el ancho disponible para la tabla */
+        }
+    }
+</style>
+{% endblock %}

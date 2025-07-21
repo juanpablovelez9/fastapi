@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "StreamFlix" }}</title>
+    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/css/styleGeneral.css') }}" rel="stylesheet">
+    {# ¡Importante para los íconos! #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    {# ESTO ES LO QUE DEBE ESTAR EN TU BASE.HTML #}
+    <header class="header"> {# <-- ¡ESTA LÍNEA ES CRÍTICA! #}
+
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 StreamFlix. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script> {# <-- main.js se carga aquí #}
+</body>
+</html>

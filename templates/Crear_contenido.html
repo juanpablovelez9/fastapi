@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Nuevo Contenido - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-card form-card">
+        <h1 class="page-title"><i class="fas fa-plus-circle icon-left"></i> Crear Nuevo Contenido</h1>
+
+        {% if success %}
+            <div class="message-container success-message-container">
+                <p class="success-message"><i class="fas fa-check-circle icon-left"></i> {{ success }}</p>
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="message-container error-message-container">
+                <p class="error-message"><i class="fas fa-exclamation-circle icon-left"></i> {{ error }}</p>
+            </div>
+        {% endif %}
+
+        <form id="contentForm" action="/Crear_contenido" method="post">
+            {# Campos comunes para ambos tipos de contenido #}
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" required
+                        placeholder="Ej: La Gran Aventura" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required
+                               placeholder="Una breve descripción del contenido..." class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_lanzamiento">Fecha de Lanzamiento:</label>
+                <input type="date" id="fecha_lanzamiento" name="fecha_lanzamiento" required
+                        class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="imagen_url">URL de la Imagen:</label>
+                <input type="text" id="imagen_url" name="imagen_url"
+                        placeholder="Ej: https://ejemplo.com/imagen.jpg" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="trailer_url">URL del Tráiler:</label>
+                <input type="text" id="trailer_url" name="trailer_url"
+                        placeholder="Ej: https://youtube.com/watch?v=abcde" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_contenido">Tipo de Contenido:</label>
+                <select id="tipo_contenido" name="tipo_contenido" class="form-control">
+                    <option value="pelicula">Película</option>
+                    <option value="serie">Serie</option>
+                </select>
+            </div>
+
+            {# Campos específicos que se mostrarán/ocultarán con JavaScript #}
+            <div id="pelicula_fields" class="content-specific-fields">
+                <div class="form-group">
+                    <label for="duracion_minutos">Duración (minutos):</label>
+                    <input type="number" id="duracion_minutos" name="duracion_minutos" min="1"
+                            placeholder="Ej: 120" class="form-control">
+                </div>
+            </div>
+
+            <div id="serie_fields" class="content-specific-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="cantidad_temporadas">Cantidad de Temporadas:</label>
+                    <input type="number" id="cantidad_temporadas" name="cantidad_temporadas" min="1"
+                            placeholder="Ej: 3" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save icon-left"></i> Crear Contenido</button>
+                <a href="/dashboard" class="btn btn-secondary"><i class="fas fa-times-circle icon-left"></i> Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    console.log('Crear_contenido.html script started DOMContentLoaded listener setup.'); // Debug 1
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired! Script inside DOMContentLoaded is running.'); // Debug 2
+
+        const tipoContenidoSelect = document.getElementById('tipo_contenido');
+        const peliculaFields = document.getElementById('pelicula_fields');
+        const serieFields = document.getElementById('serie_fields');
+        const duracionInput = document.getElementById('duracion_minutos');
+        const temporadasInput = document.getElementById('cantidad_temporadas');
+
+        // Add checks for null elements (to catch if any ID isn't found)
+        if (!tipoContenidoSelect) console.error("Error: Element with ID 'tipo_contenido' not found!");
+        if (!peliculaFields) console.error("Error: Element with ID 'pelicula_fields' not found!");
+        if (!serieFields) console.error("Error: Element with ID 'serie_fields' not found!");
+        if (!duracionInput) console.error("Error: Element with ID 'duracion_minutos' not found!");
+        if (!temporadasInput) console.error("Error: Element with ID 'cantidad_temporadas' not found!");
+
+
+        function toggleContentFields() {
+            const selectedType = tipoContenidoSelect.value;
+            console.log('toggleContentFields function called. Selected Type:', selectedType); // Debug 3
+
+            // --- PASO 1: Ocultar AMBOS campos específicos, limpiar sus valores y quitar el 'required' ---
+            peliculaFields.style.display = 'none';
+            serieFields.style.display = 'none';
+
+            duracionInput.value = '';
+            duracionInput.removeAttribute('required');
+            temporadasInput.value = '';
+            temporadasInput.removeAttribute('required');
+            // --- FIN PASO 1 ---
+
+            // --- PASO 2: Mostrar el DIV correcto y establecer 'required' en el INPUT correspondiente ---
+            if (selectedType === 'pelicula') {
+                peliculaFields.style.display = 'block';
+                duracionInput.setAttribute('required', 'required');
+            } else if (selectedType === 'serie') {
+                serieFields.style.display = 'block';
+                temporadasInput.setAttribute('required', 'required');
+            }
+            // --- FIN PASO 2 ---
+            console.log('toggleContentFields function finished.'); // Debug 4
+        }
+
+        // Ejecutar la función al cargar la página para establecer el estado inicial
+        toggleContentFields();
+        console.log('Initial toggleContentFields call completed.'); // Debug 5
+
+        // Escuchar cambios en el selector para alternar los campos
+        tipoContenidoSelect.addEventListener('change', toggleContentFields);
+        console.log('Change event listener added to tipo_contenido.'); // Debug 6
+    });
+
+    console.log('Crear_contenido.html script finished DOMContentLoaded listener setup.'); // Debug 7
+</script>
+{% endblock %}

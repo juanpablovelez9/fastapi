@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{# Personaliza el título de la pestaña del navegador para esta página #}
+{% block title %}Lista de Usuarios - {{ super() }}{% endblock %} 
+
+{% block content %}
+<div class="dashboard-container"> 
+    <div class="dashboard-card admin-users-card"> 
+        <h1>{{ title }}</h1>
+
+        {% if success %}
+            <p class="success-message">{{ success }}</p>
+        {% endif %}
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        <div class="action-buttons-top">
+            {# URL CORREGIDA para el botón Crear Nuevo Usuario #}
+            <a href="/admin/usuarios" class="btn btn-primary">Crear Nuevo Usuario</a> 
+        </div>
+
+        {% if usuarios %}
+            <div class="table-responsive">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in usuarios %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.nombre }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.rol }}</td>
+                            <td>
+                                {# Formulario para eliminar un usuario específico #}
+                                <form action="/admin/eliminarusuario/{{ user.id }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-delete" 
+                                            onclick="return confirm('¿Estás seguro de que quieres eliminar a {{ user.nombre }}? Esta acción es irreversible.');">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="no-users-message">No hay usuarios registrados en el sistema.</p>
+        {% endif %}
+
+        <div class="link-back">
+            <a href="/dashboard" class="btn btn-secondary">Volver al Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

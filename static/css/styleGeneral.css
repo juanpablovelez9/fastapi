@@ -1,0 +1,542 @@
+/* --- 1. Variables CSS (Colores y Espaciados) --- */
+:root {
+    --netflix-red: #e50914; /* Rojo principal de Netflix */
+    --netflix-red-hover: #f40612; /* Rojo para hover */
+    --netflix-red-active: #b0060f; /* Rojo para botones activos */
+    --background-dark: #141414; /* Fondo muy oscuro */
+    --card-background: #222; /* Fondo de tarjetas de contenido */
+    --text-light: #fff; /* Texto blanco puro */
+    --text-medium: #ccc; /* Texto gris claro */
+    --text-muted: #999; /* Texto gris más oscuro (meta) */
+    --border-color-dark: #3a3a3a; /* Bordes para inputs/tablas */
+    --shadow-color: rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+
+    /* Mensajes de feedback */
+    --success-green: #6bff6b;
+    --success-bg: #1c3d1c;
+    --error-red-msg: #ff6b6b; /* Un rojo diferente para mensajes de error */
+    --error-bg-msg: #3d1c1c;
+
+    /* Botones de acción específicos */
+    --btn-delete-bg: #dc3545; /* Rojo para eliminar */
+    --btn-delete-hover: #c82333;
+    --btn-edit-bg: #007bff; /* Azul para editar (si lo reintroduces) */
+    --btn-edit-hover: #0056b3;
+}
+
+/* --- 2. Estilos Globales y Reseteo Básico --- */
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Mantenemos Helvetica Neue */
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased; /* Mejorar el renderizado de fuentes */
+    scroll-behavior: smooth; /* Desplazamiento suave */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-light); /* Aseguramos que los encabezados sean blancos por defecto */
+    margin-top: 0; /* Quita el margen superior por defecto */
+    margin-bottom: 0.5em;
+}
+
+a {
+    text-decoration: none;
+    color: var(--netflix-red); /* Color de enlace principal */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--netflix-red-hover);
+}
+
+/* --- 3. Encabezado (Header) y Navegación --- */
+.main-header {
+    background-color: #000; /* Negro puro para el header */
+    padding: 15px 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center; /* Centra el contenido del header */
+    align-items: center;
+    position: sticky; /* Sticky header para que se quede arriba al hacer scroll */
+    top: 0;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.main-nav {
+    width: 100%;
+    max-width: 1400px; /* Ancho máximo para el contenido del nav */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-nav .logo {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--netflix-red);
+    letter-spacing: -1px; /* Estilo de logo de Netflix */
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links li a {
+    color: var(--text-light);
+    font-size: 1.05em;
+    font-weight: 500;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: var(--netflix-red);
+}
+
+/* Estilo para el botón de cerrar sesión en el nav */
+.btn-logout {
+    background-color: transparent; /* Sin fondo inicial */
+    border: 1px solid var(--netflix-red); /* Borde rojo */
+    color: var(--netflix-red); /* Texto rojo */
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: var(--netflix-red);
+    color: var(--text-light); /* Texto blanco al hacer hover */
+}
+
+
+/* --- 4. Contenedor Principal de Contenido --- */
+.main-content {
+    padding-top: 20px;
+    padding-bottom: 50px;
+    min-height: calc(100vh - 150px); /* Ajusta para que el footer quede abajo */
+}
+
+/* --- 5. Pie de Página (Footer) --- */
+.main-footer {
+    background-color: #000;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 25px 0;
+    font-size: 0.9em;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+/* --- 6. Estilos de Contenido (Catálogo) --- */
+h1 { /* El h1 global de la página */
+    text-align: center;
+    padding: 20px;
+    color: var(--netflix-red);
+    font-size: 2.8em;
+    margin-bottom: 0; /* Quitar margen para el padding funcione */
+}
+
+.filter-buttons {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filter-buttons .btn {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 25px;
+    background-color: var(--netflix-red);
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none; /* Asegurar que no haya borde predeterminado */
+}
+
+.filter-buttons .btn:hover {
+    background-color: var(--netflix-red-hover);
+}
+
+.filter-buttons .btn.active {
+    background-color: var(--netflix-red-active);
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px; /* Aumento ligero del gap */
+    padding: 20px;
+    max-width: 1300px; /* Aumento de ancho máximo para más espacio */
+    margin: auto;
+}
+
+.card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Sombra más intensa */
+    cursor: pointer; /* Indicar que la tarjeta es clickeable */
+}
+
+.card:hover {
+    transform: translateY(-8px); /* Efecto de levantamiento */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.7); /* Sombra más fuerte al hover */
+}
+
+.card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block; /* Elimina espacio extra debajo de la imagen */
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.2em; /* Tamaño de título ligeramente mayor */
+    font-weight: bold;
+    color: var(--text-light); /* Títulos de tarjeta en blanco */
+    margin-bottom: 5px;
+}
+
+.card-description {
+    font-size: 0.9em;
+    margin-top: 10px;
+    color: var(--text-medium);
+    height: 40px; /* Altura fija para la descripción */
+    overflow: hidden; /* Oculta el texto que desborda */
+    text-overflow: ellipsis; /* Añade puntos suspensivos */
+    display: -webkit-box;
+   /* -webkit-line-clamp: 2;*/ /* Limita a 2 líneas */
+    -webkit-box-orient: vertical;
+}
+
+.card-meta {
+    font-size: 0.8em;
+    margin-top: 12px;
+    color: var(--text-muted);
+}
+
+.card-trailer a {
+    display: inline-block;
+    margin-top: 15px; /* Más espacio */
+    color: var(--netflix-red);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.card-trailer a:hover {
+    text-decoration: underline;
+    color: var(--netflix-red-hover);
+    transform: translateX(5px); /* Pequeño movimiento al pasar el ratón */
+}
+
+/* --- 7. Estilos de Dashboard y Administración --- */
+.dashboard-container {
+    display: flex; /* Usamos flexbox para centrar y manejar el contenido */
+    justify-content: center;
+    align-items: flex-start; /* Alinea al inicio si hay varias cards */
+    padding: 40px 20px;
+    min-height: calc(100vh - 150px); /* Ajusta para que ocupe casi toda la altura */
+}
+
+.dashboard-card {
+    background-color: var(--card-background); /* Reutiliza el fondo de tarjeta */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px var(--shadow-color);
+    padding: 40px;
+    width: 100%;
+    max-width: 800px; /* Ancho máximo para la tarjeta de admin */
+    margin: 0 auto; /* Centra la tarjeta */
+    color: var(--text-light);
+    text-align: left; /* Alinea el texto a la izquierda por defecto */
+}
+
+.dashboard-card h1 {
+    color: var(--netflix-red);
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-align: center; /* Centra el título principal del dashboard/admin */
+}
+
+.action-buttons-top {
+    margin-bottom: 25px;
+    text-align: right; /* Alinea el botón "Crear Nuevo Usuario" a la derecha */
+}
+
+.no-users-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.link-back {
+    margin-top: 30px;
+    text-align: center; /* Centra el botón "Volver al Dashboard" */
+}
+
+/* --- 8. Mensajes de Feedback (Error/Éxito) --- */
+.error-message {
+    color: var(--error-red-msg);
+    background-color: var(--error-bg-msg);
+    border: 1px solid var(--error-red-msg);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.success-message {
+    color: var(--success-green);
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-green);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* --- 9. Estilos de Botones Generales y Específicos de Admin --- */
+/* Los estilos del .btn general ya están definidos arriba para .filter-buttons .btn.
+   Se redefinirán o extenderán aquí para ser más generales. */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--netflix-red);
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--netflix-red-hover);
+    transform: translateY(-2px);
+}
+
+.btn-primary { /* Mantiene el estilo de Netflix Red */
+    background-color: var(--netflix-red);
+    color: var(--text-light);
+}
+.btn-primary:hover {
+    background-color: var(--netflix-red-hover);
+}
+
+.btn-secondary { /* Un botón más neutro */
+    background-color: #333;
+    color: var(--text-light);
+    border: 1px solid #555;
+}
+.btn-secondary:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+}
+
+.btn-sm { /* Botones pequeños para acciones en tabla */
+    padding: 8px 16px;
+    font-size: 0.8em;
+    border-radius: 4px;
+    margin-right: 5px; /* Espacio entre botones pequeños */
+}
+
+.btn-delete {
+    background-color: var(--btn-delete-bg);
+    color: var(--text-light);
+}
+.btn-delete:hover {
+    background-color: var(--btn-delete-hover);
+}
+
+
+/* --- 10. Estilos de Tabla (Lista de Usuarios) --- */
+.table-responsive {
+    overflow-x: auto; /* Permite desplazamiento horizontal en tablas grandes */
+    margin-top: 20px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina espacio entre celdas */
+    margin-bottom: 20px;
+    color: var(--text-medium);
+}
+
+.user-table th,
+.user-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color-dark);
+}
+
+.user-table th {
+    background-color: #1a1a1a; /* Fondo más oscuro para los encabezados de tabla */
+    color: var(--netflix-red);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.user-table tbody tr:nth-child(even) { /* Estilo de cebra para filas pares */
+    background-color: #1f1f1f;
+}
+
+.user-table tbody tr:hover {
+    background-color: #2a2a2a; /* Resaltado al pasar el ratón */
+}
+
+/* --- 11. Estilos de Formularios (Crear Usuario) --- */
+.form-container { /* Mismo contenedor que dashboard-container pero con centrado total */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px); /* Ajusta para la altura de header/footer */
+    padding: 40px 20px;
+}
+
+.form-card { /* Reutiliza el estilo de dashboard-card */
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px var(--shadow-color);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px; /* Un poco más pequeño para formularios */
+    margin: 0 auto;
+    text-align: center; /* Centra el contenido del formulario */
+    color: var(--text-light);
+}
+
+.form-card h1 {
+    color: var(--netflix-red);
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+.form-styled .form-group {
+    margin-bottom: 20px;
+    text-align: left; /* Alinea etiquetas e inputs a la izquierda */
+}
+
+.form-styled label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-medium); /* Etiquetas un poco más suaves */
+}
+
+.form-styled input[type="text"],
+.form-styled input[type="email"],
+.form-styled input[type="password"] {
+    width: calc(100% - 24px); /* Ajusta por padding y borde */
+    padding: 12px;
+    border: 1px solid var(--border-color-dark);
+    border-radius: 8px;
+    background-color: #1a1a1a; /* Fondo oscuro para inputs */
+    color: var(--text-light);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-styled input:focus {
+    border-color: var(--netflix-red); /* Borde de acento al enfocar */
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.3); /* Sombra de acento */
+    outline: none;
+}
+
+
+/* --- 12. Media Queries para Responsividad --- */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 15px 20px;
+    }
+    .main-nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .main-nav .logo {
+        font-size: 1.8em;
+    }
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+    .grid-container {
+        grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+        padding: 15px;
+        gap: 15px;
+    }
+    .card {
+        transform: none !important; /* Desactiva el scale en hover para móviles */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* Sombra más ligera */
+    }
+    .card-img {
+        height: 250px;
+    }
+
+    .dashboard-container, .form-container {
+        padding: 20px 10px;
+        min-height: calc(100vh - 120px); /* Ajuste menor para móviles */
+    }
+    .dashboard-card, .form-card {
+        padding: 25px;
+    }
+    .dashboard-card h1, .form-card h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    .action-buttons-top {
+        text-align: center; /* Centra el botón "Crear Usuario" en móvil */
+    }
+    .btn {
+        width: 100%; /* Botones de ancho completo en móvil */
+        margin-bottom: 10px; /* Espacio entre botones apilados */
+    }
+    .btn-sm {
+        width: auto; /* Permite que los botones sm mantengan su tamaño si es necesario */
+        margin-right: 10px;
+        margin-bottom: 0;
+    }
+    .user-table th, .user-table td {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+}
+
+/* @media (min-width: 769px) {
+    .dashboard-container {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .welcome-card {
+        grid-column: span 2;
+    }
+    .admin-users-card {
+        grid-column: 1 / -1;
+    }
+} */

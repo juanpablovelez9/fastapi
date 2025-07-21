@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Contenidos</title>
+        
+    <link rel="stylesheet" href="/static/css/styleGeneral.css">
+</head>
+<body>
+    <div class="header-actions"> {# Nuevo contenedor para alinear los botones #}
+        <div class="link-back">
+            <a href="/dashboard" class="btn btn-secondary">Volver al Dashboard</a>
+        </div>
+        {# Nuevo botón para crear contenido #}
+        <div class="create-content-button">
+            <a href="/Crear_contenido" class="btn btn-primary">Crear Nuevo Contenido</a>
+        </div>
+    </div>
+
+    <h1>Catálogo de Contenidos</h1>
+    <div class="filter-buttons">
+        <a href="/contenidos?tipo=todos" class="btn {% if tipo_seleccionado == 'todos' %}active{% endif %}">Todos</a>
+        <a href="/contenidos?tipo=pelicula" class="btn {% if tipo_seleccionado == 'pelicula' %}active{% endif %}">Películas</a>
+        <a href="/contenidos?tipo=serie" class="btn {% if tipo_seleccionado == 'serie' %}active{% endif %}">Series</a>
+    </div>
+    <div class="grid-container">
+        {% for item in contenidos %}
+        <div class="card">
+            <img src="{{ item.imagen_url }}" alt="Imagen de {{ item.titulo }}">
+            <div class="card-content">
+                <div class="card-title">{{ item.titulo }}</div>
+                <div class="card-description">{{ item.descripcion }}</div>
+                <div class="card-meta">
+                    Lanzamiento: {{ item.fecha_lanzamiento }}<br>
+                    Tipo: {{ item.tipo_contenido | capitalize }}
+                </div>
+                {% if item.trailer_url %}
+                <div class="card-trailer">
+                    <a href="{{ item.trailer_url }}" target="_blank" class="btn-trailer">Ver tráiler</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
